@@ -11,7 +11,7 @@ model_conv = torch.load("model_conv.pth", weights_only=False)
 
 #model_ft.eval()
 model_conv.eval()
-
+        
 # Create a directory to save the images
 output_dir = "captured_images"
 os.makedirs(output_dir, exist_ok=True)
