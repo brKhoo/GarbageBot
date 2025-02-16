@@ -18,8 +18,8 @@ from tempfile import TemporaryDirectory
 cudnn.benchmark = True
 plt.ion()   # interactive mode
 
-# Data augmentation and normalization for training
-# Just normalization for validation
+    # Data augmentation and normalization for training
+    # Just normalization for validation
 data_transforms = {
     'train': transforms.Compose([
         transforms.RandomResizedCrop(224),
@@ -35,13 +35,13 @@ data_transforms = {
     ]),
 }
 
-data_dir = '/home/brook/VSCode/MakeUofT/garbage-baby'
+data_dir = '/home/brook/VSCode/MakeUofT/garbage-big'
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
-                                          data_transforms[x])
-                  for x in ['train', 'val']}
+                                        data_transforms[x])
+                for x in ['train', 'val']}
 dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=4,
-                                             shuffle=True, num_workers=4)
-              for x in ['train', 'val']}
+                                            shuffle=True, num_workers=4)
+            for x in ['train', 'val']}
 dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
 class_names = image_datasets['train'].classes
 
@@ -75,7 +75,7 @@ out = torchvision.utils.make_grid(inputs)
 
 #imshow(out, title=[class_names[x] for x in classes])
 
-def train_model(model, criterion, optimizer, scheduler, num_epochs=1):
+def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
     since = time.time()
 
     # Create a temporary directory to save training checkpoints
@@ -171,81 +171,87 @@ def visualize_model(model, num_images=6):
                     return
         model.train(mode=was_training)
 
-model_ft = models.resnet18(weights='IMAGENET1K_V1')
-num_ftrs = model_ft.fc.in_features
-# Here the size of each output sample is set to 2.
-# Alternatively, it can be generalized to ``nn.Linear(num_ftrs, len(class_names))``.
-model_ft.fc = nn.Linear(num_ftrs, len(class_names))
 
-model_ft = model_ft.to(device)
+if __name__ == "__main__":
+    #model_ft = models.resnet18(weights='IMAGENET1K_V1')
+    #num_ftrs = model_ft.fc.in_features
+    # Here the size of each output sample is set to 2.
+    # Alternatively, it can be generalized to ``nn.Linear(num_ftrs, len(class_names))``.
+    #model_ft.fc = nn.Linear(num_ftrs, len(class_names))
 
-criterion = nn.CrossEntropyLoss()
+    #model_ft = model_ft.to(device)
 
-# Observe that all parameters are being optimized
-optimizer_ft = optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
+    #criterion = nn.CrossEntropyLoss()
 
-# Decay LR by a factor of 0.1 every 7 epochs
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
+    # Observe that all parameters are being optimized
+    #optimizer_ft = optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
 
-model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler,
-                       num_epochs=1)
+    # Decay LR by a factor of 0.1 every 7 epochs
+    #exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 
-#visualize_model(model_ft)
+    #model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler,
+    #                    num_epochs=1)
 
-#-----------------
+    #visualize_model(model_ft)
 
-model_conv = torchvision.models.resnet18(weights='IMAGENET1K_V1')
-for param in model_conv.parameters():
-    param.requires_grad = False
+    #-----------------
 
-# Parameters of newly constructed modules have requires_grad=True by default
-num_ftrs = model_conv.fc.in_features
-model_conv.fc = nn.Linear(num_ftrs, len(class_names))
+    model_conv = torchvision.models.resnet18(weights='IMAGENET1K_V1')
+    for param in model_conv.parameters():
+        param.requires_grad = False
 
-model_conv = model_conv.to(device)
+    # Parameters of newly constructed modules have requires_grad=True by default
+    num_ftrs = model_conv.fc.in_features
+    model_conv.fc = nn.Linear(num_ftrs, len(class_names))
 
-criterion = nn.CrossEntropyLoss()
+    model_conv = model_conv.to(device)
 
-# Observe that only parameters of final layer are being optimized as
-# opposed to before.
-optimizer_conv = optim.SGD(model_conv.fc.parameters(), lr=0.001, momentum=0.9)
+    criterion = nn.CrossEntropyLoss()
 
-# Decay LR by a factor of 0.1 every 7 epochs
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
+    # Observe that only parameters of final layer are being optimized as
+    # opposed to before.
+    optimizer_conv = optim.SGD(model_conv.fc.parameters(), lr=0.001, momentum=0.9)
 
-model_conv = train_model(model_conv, criterion, optimizer_conv,
-                         exp_lr_scheduler, num_epochs=1)
+    # Decay LR by a factor of 0.1 every 7 epochs
+    exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
 
-#visualize_model(model_conv)
-plt.ioff()
-plt.show()
+    model_conv = train_model(model_conv, criterion, optimizer_conv,
+                            exp_lr_scheduler, num_epochs=25)
+
+    #visualize_model(model_conv)
+    plt.ioff()
+    plt.show()
+
+    #visualize_model_predictions(
+    #    model_conv,
+    #    img_path='/home/brook/VSCode/MakeUofT/garbage-baby/train/clothes/clothes3.jpg'
+    #)
+
+    #saving the models for use in other programs
+    #torch.save(model_ft, "model_ft.pth")
+    torch.save(model_conv, "model_conv.pth")
+
+    plt.ioff()
+    plt.show()
+
 
 def visualize_model_predictions(model,img_path):
-    was_training = model.training
-    model.eval()
+        was_training = model.training
+        model.eval()
 
-    img = Image.open(img_path)
-    img = data_transforms['val'](img)
-    img = img.unsqueeze(0)
-    img = img.to(device)
+        img = Image.open(img_path)
+        img = data_transforms['val'](img)
+        img = img.unsqueeze(0)
+        img = img.to(device)
 
-    with torch.no_grad():
-        outputs = model(img)
-        _, preds = torch.max(outputs, 1)
+        with torch.no_grad():
+            outputs = model(img)
+            _, preds = torch.max(outputs, 1)
 
-        ax = plt.subplot(2,2,1)
-        ax.axis('off')
-        ax.set_title(f'Predicted: {class_names[preds[0]]}')
-        imshow(img.cpu().data[0])
+            #ax = plt.subplot(2,2,1)
+            #ax.axis('off')
+            #ax.set_title(f'Predicted: {class_names[preds[0]]}')
+            #imshow(img.cpu().data[0])
 
-        model.train(mode=was_training)
-
-print("Checkpoint!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111")
-
-visualize_model_predictions(
-    model_conv,
-    img_path='/home/brook/VSCode/MakeUofT/garbage-baby/train/clothes/clothes3.jpg'
-)
-
-plt.ioff()
-plt.show()
+            model.train(mode=was_training)
+            return class_names[preds[0]]
