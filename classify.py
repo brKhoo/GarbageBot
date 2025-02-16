@@ -35,7 +35,7 @@ data_transforms = {
     ]),
 }
 
-data_dir = '/home/brook/VSCode/MakeUofT/Software/garbage'
+data_dir = '/home/brook/VSCode/MakeUofT/garbage-baby'
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
                                           data_transforms[x])
                   for x in ['train', 'val']}
@@ -73,9 +73,9 @@ inputs, classes = next(iter(dataloaders['train']))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
-imshow(out, title=[class_names[x] for x in classes])
+#imshow(out, title=[class_names[x] for x in classes])
 
-def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
+def train_model(model, criterion, optimizer, scheduler, num_epochs=1):
     since = time.time()
 
     # Create a temporary directory to save training checkpoints
@@ -188,9 +188,9 @@ optimizer_ft = optim.SGD(model_ft.parameters(), lr=0.001, momentum=0.9)
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
 
 model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler,
-                       num_epochs=25)
+                       num_epochs=1)
 
-visualize_model(model_ft)
+#visualize_model(model_ft)
 
 #-----------------
 
@@ -200,7 +200,7 @@ for param in model_conv.parameters():
 
 # Parameters of newly constructed modules have requires_grad=True by default
 num_ftrs = model_conv.fc.in_features
-model_conv.fc = nn.Linear(num_ftrs, 2)
+model_conv.fc = nn.Linear(num_ftrs, len(class_names))
 
 model_conv = model_conv.to(device)
 
@@ -214,9 +214,9 @@ optimizer_conv = optim.SGD(model_conv.fc.parameters(), lr=0.001, momentum=0.9)
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_conv, step_size=7, gamma=0.1)
 
 model_conv = train_model(model_conv, criterion, optimizer_conv,
-                         exp_lr_scheduler, num_epochs=25)
+                         exp_lr_scheduler, num_epochs=1)
 
-visualize_model(model_conv)
+#visualize_model(model_conv)
 plt.ioff()
 plt.show()
 
@@ -240,9 +240,11 @@ def visualize_model_predictions(model,img_path):
 
         model.train(mode=was_training)
 
+print("Checkpoint!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1111")
+
 visualize_model_predictions(
     model_conv,
-    img_path='data/hymenoptera_data/val/bees/72100438_73de9f17af.jpg'
+    img_path='/home/brook/VSCode/MakeUofT/garbage-baby/train/clothes/clothes3.jpg'
 )
 
 plt.ioff()
