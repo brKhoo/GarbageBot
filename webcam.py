@@ -5,27 +5,29 @@ import cv2
 import os
 from classify import visualize_model_predictions
 
-# cap = cv2.VideoCapture(0)
-# #model_ft = torch.load("model_ft.pth")
-# model_conv = torch.load("model_conv.pth", weights_only=False)
+cap = cv2.VideoCapture(0)
+model_ft = torch.load("model_ft.pth", weights_only=False)
+model_conv = torch.load("model_conv.pth", weights_only=False)
 
-# #model_ft.eval()
-# model_conv.eval()
+model_ft.eval()
+model_conv.eval()
         
 # # Create a directory to save the images
-# output_dir = "captured_images"
-# os.makedirs(output_dir, exist_ok=True)
+output_dir = "captured_images"
+os.makedirs(output_dir, exist_ok=True)
 
-# ret, frame = cap.read()
+ret, frame = cap.read()
 
-# timestamp = time.strftime("%Y%m%d_%H%M%S")
-# image_filename = f"{output_dir}/image_{timestamp}.jpg"
-# cv2.imwrite(image_filename, frame)
+timestamp = time.strftime("%Y%m%d_%H%M%S")
+image_filename = f"{output_dir}/image_{timestamp}.jpg"
+cv2.imwrite(image_filename, frame)
 
-# print(visualize_model_predictions(
-#     model_conv,
-#     img_path=f"{output_dir}/image_{timestamp}.jpg"
-# ))
+print(visualize_model_predictions(
+    model_conv,
+    #uncomment this line to use the webcam to take pics
+    #img_path=f"{output_dir}/image_{timestamp}.jpg"
+    img_path="D:\\VSCode\\MakeUofT\\garbage-baby\\train\\battery\\battery5.jpg"
+))
 
 
 # # Start the loop to capture frames every 3 seconds
