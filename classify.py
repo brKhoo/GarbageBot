@@ -5,14 +5,15 @@ if __name__ == "__main__":
     #freeze_support()
 
 import torch
+import cv2
 # import torch.nn as nn
 # import torch.optim as optim
 # from torch.optim import lr_scheduler
 # import torch.backends.cudnn as cudnn
-# import numpy as np
+import numpy as np
 # import torchvision
 from torchvision import datasets, models, transforms
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import time
 import os
 from PIL import Image
@@ -38,7 +39,7 @@ data_transforms = {
     ]),
 }
 
-data_dir = "D:\\VSCode\\MakeUofT\\garbage-big"
+data_dir = "/home/brook/VSCode/MakeUofT/garbage-big"
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
                                         data_transforms[x])
                 for x in ['train', 'val']}
@@ -57,17 +58,17 @@ else:
 
     # print(f"Using {device} device")
 
-    # Display image for Tensor.
-    # def imshow(inp, title=None):
-    #     inp = inp.numpy().transpose((1, 2, 0))
-    #     mean = np.array([0.485, 0.456, 0.406])
-    #     std = np.array([0.229, 0.224, 0.225])
-    #     inp = std * inp + mean
-    #     inp = np.clip(inp, 0, 1)
-    #     plt.imshow(inp)
-    #     if title is not None:
-    #         plt.title(title)
-    #     plt.pause(0.001)  # pause a bit so that plots are updated
+# Display image for Tensor.
+def imshow(inp, title=None):
+    inp = inp.numpy().transpose((1, 2, 0))
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    inp = std * inp + mean
+    inp = np.clip(inp, 0, 1)
+    plt.imshow(inp)
+    if title is not None:
+        plt.title(title)
+    plt.pause(0.001)  # pause a bit so that plots are updated
 
 
     # Get a batch of training data
@@ -178,8 +179,6 @@ else:
 
     # model_ft = models.resnet18(weights='IMAGENET1K_V1')
     # num_ftrs = model_ft.fc.in_features
-    # # Here the size of each output sample is set to 2.
-    # # Alternatively, it can be generalized to ``nn.Linear(num_ftrs, len(class_names))``.
     # model_ft.fc = nn.Linear(num_ftrs, len(class_names))
 
     # model_ft = model_ft.to(device)
@@ -231,6 +230,7 @@ else:
     # #)
 
     # #saving the models for use in other programs
+    # #Note, do not change model architecture if you want to use these files.
     #torch.save(model_ft, "model_ft.pth")
     #torch.save(model_conv, "model_conv.pth")
 
@@ -238,11 +238,14 @@ else:
     # plt.show()
 
 
-def visualize_model_predictions(model,img_path):
-    was_training = model.training
-    model.eval()
+def visualize_model_predictions(model, frame):
+    #was_training = model.training
+    #model.eval()
 
-    img = Image.open(img_path)
+    # Convert OpenCV frame to PIL image
+    img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+
+    #img = Image.open(img_path)
     img = data_transforms['val'](img)
     img = img.unsqueeze(0)
     img = img.to(device)
@@ -256,7 +259,7 @@ def visualize_model_predictions(model,img_path):
         #ax.set_title(f'Predicted: {class_names[preds[0]]}')
         #imshow(img.cpu().data[0])
 
-        model.train(mode=was_training)
+        #model.train(mode=was_training)
         return class_names[preds[0]]
 
     # print(visualize_model_predictions(
