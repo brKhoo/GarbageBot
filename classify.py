@@ -39,7 +39,7 @@ data_transforms = {
     ]),
 }
 
-data_dir = "/home/brook/VSCode/MakeUofT/garbage-big"
+data_dir = "/home/brook/VSCode/GarbageBot/garbage-big"
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir, x),
                                         data_transforms[x])
                 for x in ['train', 'val']}

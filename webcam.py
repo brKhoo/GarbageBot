@@ -31,14 +31,18 @@ while True:
         
     # Save the image
     #cv2.imwrite(image_filename, frame)
-    cv2.imshow('image window', frame)
-    #send out the classification of the image to the bluetooth receiver --------------------------------------------------
-    print(visualize_model_predictions(
-    model_ft,
-    #img_path=f"{output_dir}/image_{timestamp}.jpg"
-    frame
-    ))
 
+    #Classify the image, and display it in an openc window
+    text = visualize_model_predictions(model_ft,#img_path=f"{output_dir}/image_{timestamp}.jpg"
+                                       frame)
+    coordinates = (50, 50)
+    font = cv2.FONT_HERSHEY_DUPLEX
+    fontScale = 1
+    color = (0, 0, 0)
+    thickness = 2
+    frame = cv2.putText(frame, text, coordinates, font, fontScale, color, thickness, cv2.LINE_AA)
+    cv2.imshow("Classification", frame)
+    #send out the classification of the image to the bluetooth receiver --------------------------------------------------
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
@@ -48,6 +52,6 @@ while True:
     #time.sleep(3)
 
 # Release the webcam and close any OpenCV windows
-os.remove(image_filename)
+#os.remove(image_filename)
 cap.release()
 cv2.destroyAllWindows()
