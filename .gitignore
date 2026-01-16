@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Model files (large - trained models)
+*.pth
+*.pt
+*.h5
+*.onnx
+*.pb
+*.ckpt
+models/
+garbage_detection_best.pt
+model_ft.pth
+model_conv.pth
+resnet50_*.pth
+efficientnet_*.pth
+
+# Dataset directories (large)
+garbage-big/
+garbage-detection/
+garbage-baby/
+captured_images/
+detection_captures/
+
+# Training outputs
+detection_results/
+evaluation_results/
+runs/
+wandb/
+mlruns/
+*.log
+training_history*.png
+confusion_matrix*.png
+roc_curves*.png
+per_class_metrics*.png
+
+# YOLO specific
+yolov8*.pt
+yolov5*.pt
+*.yaml.bak
+ultralytics/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
