@@ -45,22 +45,22 @@ venv.bak/
 *.ipynb
 
 # Model files (large - trained models)
-*.pth
-*.pt
+# *.pth  # Commented out - user wants to push model files
+# *.pt   # Commented out - user wants to push .pt files
 *.h5
 *.onnx
 *.pb
 *.ckpt
 models/
-garbage_detection_best.pt
-model_ft.pth
-model_conv.pth
+# garbage_detection_best.pt  # Commented out - user wants to push
+# model_ft.pth  # Commented out - user wants to push
+# model_conv.pth  # Commented out - user wants to push
 resnet50_*.pth
 efficientnet_*.pth
 
 # Dataset directories (large)
-garbage-big/
-garbage-detection/
+# garbage-big/  # Commented out - user wants to push dataset
+# garbage-detection/  # Commented out - user wants to push dataset
 garbage-baby/
 captured_images/
 detection_captures/

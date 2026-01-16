@@ -1,0 +1,17 @@
+names:
+- battery
+- biological
+- brown-glass
+- cardboard
+- clothes
+- green-glass
+- metal
+- paper
+- plastic
+- shoes
+- trash
+- white-glass
+nc: 12
+path: /home/brook/VSCode/GarbageBot/garbage-detection
+train: train/images
+val: val/images
