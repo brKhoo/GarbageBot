@@ -97,6 +97,16 @@ GarbageBot/
    ```
    - Waits for signal from Arduino
    - Captures image, classifies, then sends location command
+   
+   **System Workflow:**
+   1. Arduino continuously monitors the shock/vibration sensor (SW-520D)
+   2. When an item is dropped, the sensor triggers and sends "Shock Detected" with the Serial/Bluetooth connection
+   3. Python script receives the signal and captures an image from the webcam
+   4. Image is classified using the ML model (ResNet50/EfficientNet or YOLOv8)
+   5. Classification result is mapped to a sorting location (1, 2, or 3)
+   6. Location command is sent back to Arduino
+   7. Arduino uses ultrasonic sensor to position the sorting mechanism
+   8. Servo motor dumps the item into the appropriate bin
 
 #### 3. **Train Classification Models**
    ```bash
@@ -187,10 +197,18 @@ USE_YOLO = False  # Set to True for YOLO detection
 Edit `training/train_advanced.py`:
 ```python
 model_name = 'resnet50'  # or 'efficientnet_b3'
-epochs = 50  # May need more epochs when training from scratch
+epochs = 50 
 batch_size = 32
 pretrained = False  # Set to True for transfer learning
 ```
+
+## Hardware Implementation
+
+**Components**: SW-520D shock sensor (D5), HC-SR04 ultrasonic sensor (D10/D11), DC motors (D6-D9), servo motor (D4). Communication available with Serial/USB (9600 baud) or HC-05 Bluetooth module.
+
+**Sorting**: Three-bin system - Location 1 (10cm) for most items, Location 2 (20cm) for biological waste, Location 3 (30cm) for recyclables (metal, plastic). Arduino positions mechanism using ultrasonic sensor, then dumps item with servo.
+
+**Setup**: Wire components together, upload `Arduino/Combined/Combined.ino`, then run `python src/bluetooth.py`.
 
 ## Evaluation
 
