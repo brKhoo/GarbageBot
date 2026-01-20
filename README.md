@@ -1,23 +1,23 @@
 # GarbageBot
 
-A robust garbage sorting system using computer vision and machine learning. This project combines image classification and object detection to categorize waste items into 12 different classes, with integration to a physical sorting system via Bluetooth.
+A garbage sorting system using computer vision and machine learning. This project combines image classification and object detection to categorize waste items into 12 different classes, with integration to a physical sorting system via Bluetooth or serial connection.
 
 ## Features
 
 - **Multiple Models**: Both classification (ResNet50/EfficientNet) and object detection (YOLOv8) models
-- **Real-time Classification**: Live webcam feed with instant predictions for objects within view
+- **Real-time Classification**: Live webcam feed with predictions for objects within view
 - **Hardware Integration**: Bluetooth/Serial communication with Arduino-based sorting system
-- **Training from Scratch**: Models learn entirely from the provided dataset
+- **Training from Scratch**: Models are trained on the precompiled dataset
 - **Advanced Training**: Data augmentation, learning rate scheduling, early stopping
 - **Extensive Evaluation**: Confusion matrices, ROC curves, per-class metrics
 
 ## Technologies Used
 
-- **Python 3.8+**
+- **Python**
 - **PyTorch** 
 - **torchvision**
 - **Ultralytics YOLOv8**
-- **OpenCV (cv2)**
+- **OpenCV**
 - **NumPy**
 - **scikit-learn**
 - **matplotlib**
@@ -29,8 +29,8 @@ A robust garbage sorting system using computer vision and machine learning. This
 
 ```
 GarbageBot/
-├── src/                    # Core functionality
-│   ├── classify.py         # Classification module
+├── src/                    # Core functionality folder
+│   ├── classify.py         # Classification program
 │   ├── detect_yolo.py     # YOLO object detection module
 │   ├── webcam.py          # Real-time webcam classification
 │   └── bluetooth.py       # Wireless Arduino integration
@@ -40,13 +40,13 @@ GarbageBot/
 │   └── train_yolo.py      # YOLO object detection training
 │
 ├── evaluation/            # Model evaluation
-│   └── evaluate_model.py  # Performance & metrics
+│   └── evaluate_model.py
 │
 ├── scripts/               # Utility scripts
 │   └── prepare_yolo_dataset.py  # Convert dataset to YOLO format
 │
 ├── garbage-big/           # Main training dataset (12 classes, ~10K images)
-├── garbage-detection/     # YOLO format dataset (from garbage-big)
+├── garbage-detection/     # YOLO formatted dataset (from garbage-big)
 ├── Arduino/               # Arduino firmware for sorting system
 │
 ├── model_ft.pth           # Fine-tuned classification model
@@ -175,8 +175,8 @@ garbage-big/
 - **Ensemble**: Combines multiple models for improved predictions
 
 ### Object Detection Model
-- **YOLOv8n**: Nano-sized YOLO model for fast inference
-- Trained on full-image bounding boxes (classification mode)
+- **YOLOv8n**: Small YOLO model for fast inference
+- Trained on full-image bounding boxes
 
 ## Configuration
 
